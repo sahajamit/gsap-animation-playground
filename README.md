@@ -1,8 +1,8 @@
 # GSAP Animation Playground
 
-A personal, hands-on reference gallery for **GSAP (GreenSock Animation Platform)**. Each example is a single, self-contained HTML file that loads GSAP from a CDN, runs an animation, and shows the exact code that produced it. The goal: whenever a project needs animation, come here, find a working example, and lift it.
+A hands-on reference gallery for **GSAP (GreenSock Animation Platform)**. Each example is a single, self-contained HTML file that loads GSAP from a CDN, runs an animation, and shows the exact code that produced it. The goal: whenever a project needs animation, open an example, see it run, read the code, and lift it.
 
-**Live gallery:** https://sahajamit.github.io/gsap-animation-playground/ *(once GitHub Pages is enabled)*
+**Live gallery:** https://sahajamit.github.io/gsap-animation-playground/
 
 ## Why this exists
 
@@ -65,7 +65,7 @@ Every template loads GSAP + the plugin it needs straight from jsDelivr:
 
 - The **scroll demos (08-10)** and **GSDevTools (18)** are best viewed over a local server rather than `file://`.
 - All plugins are loaded from the public `gsap` npm package on jsDelivr; no token or membership is required.
-- This is a learning repo (see the companion notes in [`learning-lab/in-progress/gsap-animation`](https://github.com/sahajamit/learning-lab)), not a published component library.
+- This is a reference / example repo, not a published component library. Copy what's useful.
 
 ## License
 
