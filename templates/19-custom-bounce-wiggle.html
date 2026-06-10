@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CustomBounce + CustomWiggle | GSAP Playground</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/demo.css">
+<style>
+  .stage { min-height: 400px; }
+  .cols { display: flex; gap: 80px; align-items: flex-start; width: 100%; max-width: 520px; justify-content: center; }
+  .col { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .col .label { font-family: var(--mono); font-size: 0.78rem; color: var(--txt-dim); }
+  .drop-zone { height: 260px; display: flex; flex-direction: column; align-items: center; }
+  .drop { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-2), var(--accent)); }
+  .floor { width: 90px; height: 4px; background: var(--line); border-radius: 4px; margin-top: 196px; }
+  .wiggle { font-size: 56px; transform-origin: 50% 90%; }
+</style>
+</head>
+<body>
+<header class="demo-head"></header>
+<main>
+  <div class="wrap">
+    <div class="stage">
+      <div class="cols">
+        <div class="col">
+          <div class="drop-zone"><div class="drop"></div><div class="floor"></div></div>
+          <div class="label">CustomBounce (+ squash)</div>
+        </div>
+        <div class="col">
+          <div style="height:260px;display:flex;align-items:center"><div class="wiggle">&#128276;</div></div>
+          <div class="label">CustomWiggle</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/CustomEase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/CustomBounce.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/CustomWiggle.min.js"></script>
+<script src="../assets/demo.js"></script>
+<script>
+  gsap.registerPlugin(CustomEase, CustomBounce, CustomWiggle);
+
+  // CustomBounce builds a realistic bounce ease AND a matching "squash" ease so
+  // the ball flattens on impact. CustomWiggle builds an oscillating ease (shakes,
+  // rings, nudges). Both were paid Club plugins - now free. (They need CustomEase.)
+  function run() {
+    // creates two eases: "cbounce" (position) and "cbounce-squash" (scale)
+    CustomBounce.create("cbounce", { strength: 0.7, squash: 2, squashID: "cbounce-squash" });
+    CustomWiggle.create("cwiggle", { wiggles: 8, type: "easeOut" });
+
+    const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.5 });
+    tl.fromTo(".drop", { y: 0 }, { y: 196, ease: "cbounce", duration: 2 })
+      .to(".drop", { scaleX: 1.4, scaleY: 0.6, transformOrigin: "bottom center", ease: "cbounce-squash", duration: 2 }, 0);
+
+    gsap.to(".wiggle", { rotation: 22, ease: "cwiggle", duration: 1.3, repeat: -1, repeatDelay: 0.5 });
+  }
+  Demo.init({
+    num: "19 / dev",
+    title: "CustomBounce + CustomWiggle eases",
+    blurb: "Two parametric ease factories. CustomBounce gives a tunable bounce plus an auto-synced squash ease for real impact weight; CustomWiggle gives oscillation for shakes, bells, and nudges. Both free since Apr 2025.",
+    plugins: "CustomBounce + CustomWiggle (free since Apr 2025)",
+    doc: "https://gsap.com/docs/v3/Eases/CustomBounce/",
+    run: run
+  });
+</script>
+</body>
+</html>

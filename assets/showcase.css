@@ -1,0 +1,27 @@
+/* gsap-animation-playground - shared chrome for the Showcase pieces */
+
+.sc-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 24px;
+  background: rgba(11, 13, 18, 0.55);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.sc-bar a.back { font-family: var(--mono); font-size: 0.85rem; color: var(--txt); }
+.sc-bar .spacer { flex: 1; }
+.sc-bar .tag {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--accent);
+  padding: 5px 12px;
+  border: 1px solid rgba(136, 206, 2, 0.3);
+  border-radius: 999px;
+}
+
+/* a soft cursor reset for showcase pieces that hide the native cursor */
+.no-native, .no-native * { cursor: none; }

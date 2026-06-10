@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Animated Hero | GSAP Showcase</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/showcase.css">
+<style>
+  body { overflow: hidden; }
+  .hero { position: relative; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 70px 6vw 40px; box-sizing: border-box; }
+  .mesh { position: absolute; inset: -20%; z-index: -1; filter: blur(40px); opacity: 0.7; }
+  .orb { position: absolute; border-radius: 50%; }
+  .o1 { width: 46vw; height: 46vw; background: var(--accent); top: -10%; left: -8%; }
+  .o2 { width: 40vw; height: 40vw; background: var(--accent-3); bottom: -12%; right: -6%; }
+  .o3 { width: 30vw; height: 30vw; background: var(--accent-2); top: 30%; left: 40%; }
+  .eyebrow { font-family: var(--mono); font-size: 0.85rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 22px; }
+  .title { font-size: clamp(2.2rem, 6.5vw, 4.8rem); font-weight: 800; line-height: 1; letter-spacing: -0.03em; margin: 0; }
+  .title .word { display: inline-block; }
+  .lede { margin-top: 26px; max-width: 48ch; color: var(--txt-dim); font-size: clamp(1rem, 2.4vw, 1.25rem); line-height: 1.5; }
+  .magnetic { margin-top: 40px; position: relative; }
+  .magnetic button { font-family: var(--sans); font-weight: 700; font-size: 1.05rem; color: #0b0d12; background: var(--accent);
+    border: none; border-radius: 999px; padding: 16px 40px; cursor: pointer; }
+  .cue { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: 0.8rem; color: var(--txt-dim); }
+</style>
+</head>
+<body>
+<div class="sc-bar"><a class="back" href="../index.html">&larr; gallery</a><div class="spacer"></div><span class="tag">SplitText + magnetic button + parallax</span></div>
+
+<section class="hero">
+  <div class="mesh"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+  <div class="eyebrow">GreenSock Animation Platform</div>
+  <h1 class="title">Make the web move.</h1>
+  <p class="lede">A hero built from a staggered text reveal, drifting gradient orbs, and a button that leans toward your cursor.</p>
+  <div class="magnetic"><button>Get started</button></div>
+  <div class="cue">move your mouse &middot; hover the button</div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/SplitText.min.js"></script>
+<script>
+  gsap.registerPlugin(SplitText);
+
+  // 1) staggered word reveal
+  const split = new SplitText(".title", { type: "words" });
+  const tl = gsap.timeline();
+  tl.from(split.words, { yPercent: 120, opacity: 0, stagger: 0.12, duration: 1, ease: "power4.out" })
+    .from(".eyebrow", { opacity: 0, y: 20, duration: 0.6 }, 0.2)
+    .from(".lede", { opacity: 0, y: 20, duration: 0.6 }, "-=0.5")
+    .from(".magnetic", { opacity: 0, y: 20, duration: 0.6 }, "-=0.4");
+
+  // 2) gradient orbs drift forever (independent loops)
+  gsap.to(".o1", { x: 60, y: 40, scale: 1.1, duration: 9, repeat: -1, yoyo: true, ease: "sine.inOut" });
+  gsap.to(".o2", { x: -50, y: -30, scale: 1.15, duration: 11, repeat: -1, yoyo: true, ease: "sine.inOut" });
+  gsap.to(".o3", { x: 40, y: -50, duration: 7, repeat: -1, yoyo: true, ease: "sine.inOut" });
+
+  // 3) whole mesh follows the pointer a little = depth (quickTo = cheap smooth follower)
+  const meshX = gsap.quickTo(".mesh", "xPercent", { duration: 0.8, ease: "power3" });
+  const meshY = gsap.quickTo(".mesh", "yPercent", { duration: 0.8, ease: "power3" });
+  window.addEventListener("pointermove", (e) => {
+    const nx = (e.clientX / window.innerWidth - 0.5);
+    const ny = (e.clientY / window.innerHeight - 0.5);
+    meshX(nx * 6); meshY(ny * 6);
+  });
+
+  // 4) magnetic button: pulls toward the cursor when you're near it
+  const wrap = document.querySelector(".magnetic");
+  const btn = wrap.querySelector("button");
+  const bx = gsap.quickTo(btn, "x", { duration: 0.4, ease: "power3" });
+  const by = gsap.quickTo(btn, "y", { duration: 0.4, ease: "power3" });
+  wrap.addEventListener("pointermove", (e) => {
+    const r = wrap.getBoundingClientRect();
+    bx((e.clientX - (r.left + r.width / 2)) * 0.4);
+    by((e.clientY - (r.top + r.height / 2)) * 0.4);
+  });
+  wrap.addEventListener("pointerleave", () => { bx(0); by(0); });
+  btn.addEventListener("click", () => { window.location.href = "../index.html"; });
+</script>
+</body>
+</html>

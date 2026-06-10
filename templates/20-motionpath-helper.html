@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MotionPathHelper | GSAP Playground</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/demo.css">
+<style>
+  .stage { min-height: 380px; }
+  #ball { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-2), var(--accent)); position: absolute; top: 0; left: 0; }
+  .hint { position: absolute; bottom: 12px; left: 0; right: 0; text-align: center; font-family: var(--mono); font-size: 0.78rem; color: var(--txt-dim); }
+</style>
+</head>
+<body>
+<header class="demo-head"></header>
+<main>
+  <div class="wrap">
+    <div class="stage">
+      <div id="ball"></div>
+      <div class="hint">drag the white anchor points / handles to reshape the path live</div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/MotionPathPlugin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/MotionPathHelper.min.js"></script>
+<script src="../assets/demo.js"></script>
+<script>
+  gsap.registerPlugin(MotionPathPlugin, MotionPathHelper);
+
+  // MotionPathHelper overlays a draggable, editable Bezier path on top of a
+  // MotionPath tween while you build. Reshape the curve by dragging handles, then
+  // copy the resulting path string into your code. A development tool - was paid, now free.
+  function run() {
+    const tween = gsap.to("#ball", {
+      duration: 4,
+      repeat: -1,
+      ease: "power1.inOut",
+      motionPath: {
+        path: [{ x: 60, y: 60 }, { x: 320, y: 30 }, { x: 200, y: 220 }, { x: 460, y: 180 }],
+        curviness: 1.5
+      }
+    });
+
+    // make that tween's path editable on screen
+    MotionPathHelper.create(tween);
+  }
+  Demo.init({
+    num: "20 / dev",
+    title: "MotionPathHelper: edit a path in the browser",
+    blurb: "An authoring tool: it draws the editable Bezier path for a MotionPath tween right on the page so you can drag the curve into shape and copy the result back into code. Faster than guessing coordinates. Free since Apr 2025.",
+    plugins: "MotionPathPlugin + MotionPathHelper (free since Apr 2025)",
+    doc: "https://gsap.com/docs/v3/Plugins/MotionPathHelper/",
+    run: run
+  });
+</script>
+</body>
+</html>

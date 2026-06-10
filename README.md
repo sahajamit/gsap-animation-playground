@@ -34,7 +34,20 @@ Every template loads GSAP + the plugin it needs straight from jsDelivr:
 </script>
 ```
 
-## What's inside
+## Showcase
+
+Composed, real-world scenes that combine multiple plugins, inspired by the [official GSAP showcase](https://gsap.com/showcase/). Find them in `showcase/`:
+
+| Piece | What it shows | Plugin(s) |
+|-------|---------------|-----------|
+| Scroll Story | momentum scroll, % preloader, full-bleed scenes that crossfade & reveal | ScrollSmoother, ScrollTrigger, SplitText |
+| Animated Hero | staggered text reveal, drifting gradient orbs, magnetic button | SplitText, quickTo |
+| Horizontal Gallery | vertical scroll drives a pinned section sideways | ScrollTrigger (pin) |
+| Grid Reveal + Filter | stagger-in, hover micro-interactions, Flip filtering | Flip |
+| Preloader to Reveal | counting loader + staggered curtain wipe | core timeline, SplitText |
+| Custom Cursor + Magnetic | eased trailing cursor + buttons that lean toward the pointer | quickTo |
+
+## Plugin & building-block demos
 
 | # | Example | Plugin(s) |
 |---|---------|-----------|
@@ -56,6 +69,9 @@ Every template loads GSAP + the plugin it needs straight from jsDelivr:
 | 16 | Observer (unified input) | Observer |
 | 17 | Physics2D (confetti burst) | Physics2DPlugin |
 | 18 | GSDevTools + CustomEase | GSDevTools + CustomEase |
+| 19 | CustomBounce + CustomWiggle eases | CustomBounce + CustomWiggle |
+| 20 | MotionPathHelper (edit a path live) | MotionPathHelper |
+| 21 | PhysicsProps (forces, not destinations) | PhysicsPropsPlugin |
 
 ## How the harness works
 

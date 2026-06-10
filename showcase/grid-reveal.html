@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grid Reveal + Filter | GSAP Showcase</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/showcase.css">
+<style>
+  .page { max-width: 1080px; margin: 0 auto; padding: 100px 24px 80px; }
+  .page h1 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 800; letter-spacing: -0.02em; margin: 0 0 8px; }
+  .page .sub { color: var(--txt-dim); margin-bottom: 28px; }
+  .filters { display: flex; gap: 10px; margin-bottom: 26px; flex-wrap: wrap; }
+  .filters button { font-family: var(--mono); font-size: 0.85rem; color: var(--txt); background: var(--bg-card);
+    border: 1px solid var(--line); border-radius: 999px; padding: 8px 18px; cursor: pointer; transition: all 0.2s; }
+  .filters button.active { background: var(--accent); color: #0b0d12; border-color: var(--accent); font-weight: 600; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+  .g-item { aspect-ratio: 1; border-radius: 16px; display: flex; align-items: flex-end; padding: 18px;
+    font-weight: 700; color: #0b0d12; cursor: pointer; transition: transform 0.3s cubic-bezier(.2,.8,.2,1), box-shadow 0.3s; will-change: transform; }
+  .g-item:hover { transform: translateY(-8px) scale(1.03); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+  .g-item .cat { position: absolute; }
+</style>
+</head>
+<body>
+<div class="sc-bar"><a class="back" href="../index.html">&larr; gallery</a><div class="spacer"></div><span class="tag">Flip + stagger + hover</span></div>
+
+<div class="page">
+  <h1>Work grid</h1>
+  <p class="sub">Stagger reveal on load. Filter to watch items rearrange with Flip. Hover any card.</p>
+  <div class="filters">
+    <button data-cat="all" class="active">All</button>
+    <button data-cat="text">Text</button>
+    <button data-cat="scroll">Scroll</button>
+    <button data-cat="svg">SVG</button>
+  </div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/Flip.min.js"></script>
+<script>
+  gsap.registerPlugin(Flip);
+
+  // seed the grid
+  const data = [
+    ["SplitText", "text", "#88ce02,#0ae448"], ["Typewriter", "text", "#0ae448,#4dd0e1"],
+    ["ScrollTrigger", "scroll", "#4dd0e1,#6d5dfc"], ["Smoother", "scroll", "#6d5dfc,#a48bff"],
+    ["DrawSVG", "svg", "#f6c945,#ff6b6b"], ["MorphSVG", "svg", "#ff6b6b,#f6c945"],
+    ["Scramble", "text", "#a48bff,#6d5dfc"], ["Observer", "scroll", "#0ae448,#88ce02"], ["MotionPath", "svg", "#4dd0e1,#0ae448"]
+  ];
+  const grid = document.getElementById("grid");
+  data.forEach(([name, cat, grad]) => {
+    const el = document.createElement("div");
+    el.className = "g-item"; el.dataset.cat = cat; el.textContent = name;
+    el.style.background = `linear-gradient(135deg, ${grad})`;
+    grid.appendChild(el);
+  });
+  const items = gsap.utils.toArray(".g-item");
+
+  // reveal on load
+  gsap.from(items, { y: 50, opacity: 0, scale: 0.9, duration: 0.7, ease: "power3.out", stagger: { each: 0.05 } });
+
+  // Flip-powered filtering
+  document.querySelectorAll(".filters button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const state = Flip.getState(items);                       // 1. record positions
+      const cat = btn.dataset.cat;
+      items.forEach((it) => { it.style.display = (cat === "all" || it.dataset.cat === cat) ? "" : "none"; }); // 2. change DOM
+      Flip.from(state, {                                        // 3. animate the diff
+        duration: 0.6, ease: "power2.inOut", scale: true, absolute: true, stagger: 0.04,
+        onEnter: (els) => gsap.fromTo(els, { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.4 }),
+        onLeave: (els) => gsap.to(els, { opacity: 0, scale: 0.7, duration: 0.3 })
+      });
+      document.querySelectorAll(".filters button").forEach((b) => b.classList.toggle("active", b === btn));
+    });
+  });
+</script>
+</body>
+</html>

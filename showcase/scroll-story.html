@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scroll Story | GSAP Showcase</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/showcase.css">
+<style>
+  body { overflow-x: hidden; }
+  .scene { min-height: 100vh; padding: 120px 6vw; display: flex; flex-direction: column; justify-content: center; position: relative; }
+
+  /* preloader */
+  #preloader { position: fixed; inset: 0; z-index: 2000; background: #0b0d12;
+    display: flex; align-items: center; justify-content: center; }
+  #preloader .pct { font-size: clamp(3rem, 14vw, 9rem); font-weight: 800; letter-spacing: -0.04em; color: var(--txt); }
+  #preloader .prebar { position: absolute; bottom: 0; left: 0; height: 3px; width: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; }
+
+  /* fixed UI */
+  .progress { position: fixed; bottom: 0; left: 0; height: 3px; width: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; z-index: 900; }
+  .scene-no { position: fixed; top: 16px; right: 24px; font-family: var(--mono); font-size: 0.8rem; color: var(--txt-dim); z-index: 1001; }
+
+  /* scenes */
+  .s-hero { background: radial-gradient(1000px 500px at 20% 10%, rgba(136,206,2,0.16), transparent 60%), radial-gradient(800px 500px at 90% 30%, rgba(109,93,252,0.18), transparent 55%); }
+  .hero-title { font-size: clamp(2.6rem, 9vw, 8rem); line-height: 0.98; font-weight: 800; letter-spacing: -0.03em; margin: 0; }
+  .hero-sub { margin-top: 24px; color: var(--txt-dim); font-family: var(--mono); font-size: clamp(0.8rem, 2vw, 1rem); }
+  .float { position: absolute; border-radius: 30%; filter: blur(2px); opacity: 0.5; }
+  .f1 { width: 120px; height: 120px; background: var(--accent); top: 18%; right: 12%; }
+  .f2 { width: 70px; height: 70px; background: var(--accent-3); bottom: 20%; left: 14%; }
+  .f3 { width: 40px; height: 40px; background: var(--accent-2); top: 30%; left: 40%; }
+
+  .s-statement .line-mask { overflow: hidden; }
+  .s-statement .big { font-size: clamp(1.6rem, 5.5vw, 4rem); font-weight: 700; line-height: 1.1; max-width: 18ch; letter-spacing: -0.01em; }
+  .s-statement .big em { color: var(--accent); font-style: normal; }
+
+  .s-reel .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .s-reel .tile { aspect-ratio: 4/3; border-radius: 14px; }
+  .s-reel .label { font-family: var(--mono); color: var(--txt-dim); margin-bottom: 22px; font-size: 0.85rem; }
+
+  .s-pin { height: 100vh; overflow: hidden; }
+  .s-pin .panel { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .s-pin .word { font-size: clamp(3rem, 16vw, 13rem); font-weight: 800; letter-spacing: -0.04em; white-space: nowrap; }
+  .s-pin .reveal-img { position: absolute; inset: 12% 10%; border-radius: 20px;
+    background: linear-gradient(135deg, var(--accent-3), var(--accent-2)); clip-path: inset(100% 0 0 0); }
+
+  .s-cta { text-align: center; align-items: center; background: radial-gradient(700px 400px at 50% 50%, rgba(10,228,72,0.1), transparent 60%); }
+  .s-cta h2 { font-size: clamp(2rem, 8vw, 6rem); font-weight: 800; letter-spacing: -0.03em; margin: 0 0 28px; }
+  .cta-btn { font-family: var(--sans); font-weight: 700; font-size: 1.1rem; color: #0b0d12; background: var(--accent);
+    border: none; border-radius: 999px; padding: 16px 38px; cursor: pointer; }
+</style>
+</head>
+<body>
+<div id="preloader"><span class="pct">0%</span><div class="prebar"></div></div>
+<div class="sc-bar"><a class="back" href="../index.html">&larr; gallery</a><div class="spacer"></div><span class="tag">ScrollSmoother + ScrollTrigger + SplitText</span></div>
+<div class="scene-no">01 / 05</div>
+<div class="progress"></div>
+
+<div id="smooth-wrapper">
+  <div id="smooth-content">
+
+    <section class="scene s-hero" data-scene="01">
+      <div class="float f1" data-speed="0.7"></div>
+      <div class="float f2" data-speed="1.3"></div>
+      <div class="float f3" data-speed="1.6"></div>
+      <h1 class="hero-title">Motion that<br>tells a story.</h1>
+      <p class="hero-sub" data-speed="1.2">scroll &darr;</p>
+    </section>
+
+    <section class="scene s-statement" data-scene="02">
+      <div class="big">
+        <div class="line-mask"><span>Every great site has</span></div>
+        <div class="line-mask"><span>a sense of <em>rhythm</em>.</span></div>
+        <div class="line-mask"><span>You feel it before</span></div>
+        <div class="line-mask"><span>you read a word.</span></div>
+      </div>
+    </section>
+
+    <section class="scene s-reel" data-scene="03">
+      <div class="label" data-speed="1.1">// selected frames</div>
+      <div class="grid">
+        <div class="tile" data-speed="1.05" style="background:linear-gradient(135deg,#88ce02,#0ae448)"></div>
+        <div class="tile" data-speed="0.92" style="background:linear-gradient(135deg,#6d5dfc,#a48bff)"></div>
+        <div class="tile" data-speed="1.12" style="background:linear-gradient(135deg,#f6c945,#ff6b6b)"></div>
+        <div class="tile" data-speed="0.95" style="background:linear-gradient(135deg,#4dd0e1,#6d5dfc)"></div>
+        <div class="tile" data-speed="1.08" style="background:linear-gradient(135deg,#0ae448,#4dd0e1)"></div>
+        <div class="tile" data-speed="0.9" style="background:linear-gradient(135deg,#ff6b6b,#f6c945)"></div>
+      </div>
+    </section>
+
+    <section class="scene s-pin" data-scene="04">
+      <div class="panel"><div class="word">SCROLL</div></div>
+      <div class="reveal-img"></div>
+      <div class="panel"><div class="word" style="color:#0b0d12;mix-blend-mode:overlay">DRIVES</div></div>
+    </section>
+
+    <section class="scene s-cta" data-scene="05">
+      <h2>Now go build<br>something alive.</h2>
+      <button class="cta-btn">View the building blocks</button>
+    </section>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollSmoother.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/SplitText.min.js"></script>
+<script>
+  gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
+
+  // momentum scrolling (GSAP's answer to Lenis) + data-speed parallax
+  ScrollSmoother.create({ wrapper: "#smooth-wrapper", content: "#smooth-content", smooth: 1.4, effects: true });
+
+  const sceneNo = document.querySelector(".scene-no");
+
+  // overall progress bar
+  ScrollTrigger.create({
+    trigger: "#smooth-content", start: "top top", end: "bottom bottom",
+    onUpdate: (self) => gsap.set(".progress", { scaleX: self.progress })
+  });
+
+  // update the scene counter as each section takes the screen
+  gsap.utils.toArray("[data-scene]").forEach((sec) => {
+    ScrollTrigger.create({
+      trigger: sec, start: "top center", end: "bottom center",
+      onToggle: (self) => { if (self.isActive) sceneNo.textContent = sec.dataset.scene + " / 05"; }
+    });
+  });
+
+  // scene 02: masked line reveal, scrubbed to scroll
+  gsap.from(".s-statement .line-mask span", {
+    yPercent: 120, stagger: 0.15, ease: "power3.out",
+    scrollTrigger: { trigger: ".s-statement", start: "top 70%", end: "center center", scrub: true }
+  });
+
+  // scene 03: tiles rise + fade in, staggered, on enter
+  gsap.from(".s-reel .tile", {
+    y: 80, opacity: 0, scale: 0.9, duration: 0.8, ease: "power3.out", stagger: 0.08,
+    scrollTrigger: { trigger: ".s-reel .grid", start: "top 80%" }
+  });
+
+  // scene 04: pin and scrub - words slide opposite directions, image wipes up
+  const pin = gsap.timeline({
+    scrollTrigger: { trigger: ".s-pin", start: "top top", end: "+=1400", pin: true, scrub: true }
+  });
+  pin.fromTo(".s-pin .panel:nth-child(1) .word", { x: "30vw" }, { x: "-30vw", ease: "none" })
+     .fromTo(".s-pin .panel:nth-child(3) .word", { x: "-30vw" }, { x: "30vw", ease: "none" }, 0)
+     .fromTo(".s-pin .reveal-img", { clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", ease: "power2.inOut" }, 0.15);
+
+  // scene 05: CTA headline split reveal on enter
+  const ctaSplit = new SplitText(".s-cta h2", { type: "chars" });
+  gsap.from(ctaSplit.chars, {
+    yPercent: 120, opacity: 0, stagger: 0.02, ease: "back.out(1.6)", duration: 0.7,
+    scrollTrigger: { trigger: ".s-cta", start: "top 70%" }
+  });
+  document.querySelector(".cta-btn").addEventListener("click", () => { window.location.href = "../index.html"; });
+
+  // hero intro (held until the preloader finishes)
+  const heroSplit = new SplitText(".hero-title", { type: "chars" });
+  gsap.set(heroSplit.chars, { yPercent: 120, opacity: 0 });
+  function playHero() {
+    gsap.to(heroSplit.chars, { yPercent: 0, opacity: 1, stagger: 0.02, duration: 0.8, ease: "power3.out" });
+    gsap.from(".hero-sub", { opacity: 0, y: 20, delay: 0.6, duration: 0.6 });
+  }
+
+  // preloader: count 0 -> 100, fill the bar, then wipe away and start the hero
+  const counter = { v: 0 };
+  const pct = document.querySelector("#preloader .pct");
+  gsap.timeline()
+    .to(counter, { v: 100, duration: 1.8, ease: "power1.inOut",
+      onUpdate: () => {
+        pct.textContent = Math.round(counter.v) + "%";
+        gsap.set("#preloader .prebar", { scaleX: counter.v / 100 });
+      } })
+    .to("#preloader .pct", { y: -40, opacity: 0, duration: 0.4, ease: "power2.in" })
+    .to("#preloader", { yPercent: -100, duration: 0.8, ease: "power4.inOut", onComplete: playHero }, "-=0.1");
+</script>
+</body>
+</html>

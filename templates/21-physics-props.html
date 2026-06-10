@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PhysicsProps | GSAP Playground</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/demo.css">
+<style>
+  .stage { gap: 60px; }
+  .spinner { width: 120px; height: 120px; position: relative; }
+  .spinner .spoke { position: absolute; left: 50%; top: 50%; width: 4px; height: 56px; background: var(--accent); transform-origin: top center; border-radius: 4px; }
+  .pin { width: 14px; height: 14px; border-radius: 50%; background: var(--accent-3); position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+  .label { font-family: var(--mono); font-size: 0.78rem; color: var(--txt-dim); text-align: center; margin-top: 14px; }
+</style>
+</head>
+<body>
+<header class="demo-head"></header>
+<main>
+  <div class="wrap">
+    <div class="stage">
+      <div>
+        <div class="spinner" id="spinner"><div class="pin"></div></div>
+        <div class="label">rotation: high velocity + friction = spins down to rest</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/PhysicsPropsPlugin.min.js"></script>
+<script src="../assets/demo.js"></script>
+<script>
+  gsap.registerPlugin(PhysicsPropsPlugin);
+
+  // PhysicsPropsPlugin animates ANY property using physics inputs (velocity,
+  // acceleration, friction) instead of a fixed end value - so you describe forces,
+  // not destinations. Here a wheel is given a high spin velocity + friction and
+  // naturally decelerates to a stop. Sibling of Physics2D; was paid, now free.
+  function run() {
+    const spinner = document.getElementById("spinner");
+    // build a few spokes so the spin is visible
+    for (let i = 0; i < 6; i++) {
+      const s = document.createElement("div");
+      s.className = "spoke";
+      s.style.transform = `translate(-50%, 0) rotate(${i * 60}deg)`;
+      s.style.opacity = 0.4 + (i % 2) * 0.6;
+      spinner.appendChild(s);
+    }
+
+    gsap.to(spinner, {
+      duration: 5,
+      repeat: -1,
+      repeatDelay: 0.4,
+      physicsProps: {
+        rotation: { velocity: 720, friction: 0.4 } // deg/sec, with drag -> eases to a stop
+      }
+    });
+  }
+  Demo.init({
+    num: "21 / dev",
+    title: "PhysicsProps: forces, not destinations",
+    blurb: "Animate any property by describing velocity, acceleration, and friction rather than an end value. The wheel is flung at high angular velocity and friction bleeds it to a natural stop - like a spun knob or fortune wheel. Free since Apr 2025.",
+    plugins: "PhysicsPropsPlugin (free since Apr 2025)",
+    doc: "https://gsap.com/docs/v3/Plugins/PhysicsPropsPlugin/",
+    run: run
+  });
+</script>
+</body>
+</html>

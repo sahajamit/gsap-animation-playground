@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preloader to Reveal | GSAP Showcase</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/showcase.css">
+<style>
+  body { overflow: hidden; }
+  .hero { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 6vw;
+    background: radial-gradient(900px 500px at 50% 20%, rgba(136,206,2,0.15), transparent 60%); }
+  .hero h1 { font-size: clamp(2.4rem, 8vw, 6.5rem); font-weight: 800; letter-spacing: -0.03em; margin: 0; overflow: hidden; }
+  .hero h1 span { display: inline-block; }
+  .hero p { color: var(--txt-dim); font-family: var(--mono); margin-top: 20px; }
+  .replay { margin-top: 30px; }
+
+  /* preloader */
+  #loader { position: fixed; inset: 0; z-index: 1500; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+  .curtain { position: fixed; inset: 0; z-index: 1400; display: flex; }
+  .col { flex: 1; background: #0b0d12; border-right: 1px solid rgba(255,255,255,0.03); }
+  .count { position: relative; z-index: 1501; font-size: clamp(3rem, 16vw, 11rem); font-weight: 800; letter-spacing: -0.04em; }
+  .bars { position: fixed; bottom: 18%; left: 50%; transform: translateX(-50%); z-index: 1501; display: flex; gap: 8px; }
+  .bars i { width: 40px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 4px; overflow: hidden; position: relative; }
+  .bars i::after { content: ""; position: absolute; inset: 0; background: var(--accent); transform: scaleX(0); transform-origin: left; }
+</style>
+</head>
+<body>
+<div class="sc-bar"><a class="back" href="../index.html">&larr; gallery</a><div class="spacer"></div><span class="tag">counter + staggered curtain reveal</span></div>
+
+<section class="hero">
+  <h1><span>Loaded.</span></h1>
+  <p>the intro sequence above is the whole point</p>
+  <button class="btn replay" id="replay" style="font-family:var(--sans);font-weight:600;color:#0b0d12;background:var(--accent);border:none;border-radius:9px;padding:10px 22px;cursor:pointer">&#8635; Replay intro</button>
+</section>
+
+<div class="curtain" id="curtain"><div class="col"></div><div class="col"></div><div class="col"></div><div class="col"></div><div class="col"></div></div>
+<div id="loader"><div class="count">0%</div></div>
+<div class="bars"><i></i><i></i><i></i><i></i><i></i></div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/SplitText.min.js"></script>
+<script>
+  gsap.registerPlugin(SplitText);
+  const heroSplit = new SplitText(".hero h1", { type: "chars" });
+
+  function play() {
+    // reset
+    gsap.set("#curtain", { display: "flex" });
+    gsap.set(".col", { yPercent: 0 });
+    gsap.set("#loader", { autoAlpha: 1 });
+    gsap.set(".count", { y: 0, autoAlpha: 1 });
+    gsap.set(heroSplit.chars, { yPercent: 110 });
+
+    const counter = { v: 0 };
+    const countEl = document.querySelector(".count");
+
+    const tl = gsap.timeline();
+    tl.to(counter, { v: 100, duration: 2, ease: "power1.inOut",
+        onUpdate: () => { countEl.textContent = Math.round(counter.v) + "%"; } }, 0)
+      .to(".count", { y: -60, autoAlpha: 0, duration: 0.5, ease: "power2.in" })
+      .to(".col", { yPercent: -100, duration: 0.9, stagger: 0.08, ease: "power4.inOut" }, "-=0.2")
+      .set("#curtain", { display: "none" })
+      .to(heroSplit.chars, { yPercent: 0, stagger: 0.04, duration: 0.7, ease: "back.out(1.6)" }, "-=0.3")
+      .from(".hero p, .replay", { opacity: 0, y: 16, duration: 0.5, stagger: 0.1 }, "-=0.3");
+  }
+
+  // fill bars via pseudo-element scaleX using a CSS var workaround:
+  // simplest = animate a real overlay. We animate the ::after by toggling a class timeline.
+  function fillBars() {
+    gsap.utils.toArray(".bars i").forEach((bar, i) => {
+      const after = document.createElement("b");
+      after.style.cssText = "position:absolute;inset:0;background:var(--accent);transform:scaleX(0);transform-origin:left;border-radius:4px";
+      bar.appendChild(after);
+      gsap.to(after, { scaleX: 1, duration: 1.8, delay: i * 0.12, ease: "power1.inOut" });
+    });
+  }
+
+  fillBars();
+  play();
+  document.getElementById("replay").addEventListener("click", () => {
+    // clear bar fills and refill
+    document.querySelectorAll(".bars i b").forEach((b) => b.remove());
+    fillBars();
+    play();
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Horizontal Gallery | GSAP Showcase</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/showcase.css">
+<style>
+  body { overflow-x: hidden; }
+  .intro, .outro { height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 6vw; }
+  .intro h1 { font-size: clamp(2rem, 7vw, 5rem); font-weight: 800; letter-spacing: -0.03em; }
+  .intro p, .outro p { color: var(--txt-dim); font-family: var(--mono); }
+  .h-section { height: 100vh; overflow: hidden; }
+  .h-track { display: flex; height: 100vh; width: max-content; }
+  .h-panel { width: 80vw; height: 100vh; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: relative; }
+  .h-card { width: 72%; height: 64%; border-radius: 24px; display: flex; align-items: flex-end; padding: 36px;
+    font-size: clamp(1.4rem, 4vw, 3rem); font-weight: 800; color: #0b0d12; }
+  .h-num { position: absolute; top: 12%; left: 12%; font-family: var(--mono); font-size: 1rem; color: var(--txt-dim); }
+</style>
+</head>
+<body>
+<div class="sc-bar"><a class="back" href="../index.html">&larr; gallery</a><div class="spacer"></div><span class="tag">ScrollTrigger horizontal pin + scrub</span></div>
+
+<section class="intro"><div><h1>Scroll down,<br>move sideways.</h1><p>&darr; keep scrolling</p></div></section>
+
+<section class="h-section">
+  <div class="h-track">
+    <div class="h-panel"><span class="h-num">01</span><div class="h-card" style="background:linear-gradient(135deg,#88ce02,#0ae448)">Reveal</div></div>
+    <div class="h-panel"><span class="h-num">02</span><div class="h-card" style="background:linear-gradient(135deg,#0ae448,#4dd0e1)">Pin</div></div>
+    <div class="h-panel"><span class="h-num">03</span><div class="h-card" style="background:linear-gradient(135deg,#4dd0e1,#6d5dfc);color:#fff">Scrub</div></div>
+    <div class="h-panel"><span class="h-num">04</span><div class="h-card" style="background:linear-gradient(135deg,#6d5dfc,#a48bff);color:#fff">Parallax</div></div>
+    <div class="h-panel"><span class="h-num">05</span><div class="h-card" style="background:linear-gradient(135deg,#f6c945,#ff6b6b)">Morph</div></div>
+  </div>
+</section>
+
+<section class="outro"><p>// vertical scroll drove all of that horizontal motion</p></section>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Classic horizontal-scroll section: pin the viewport, then translate the track
+  // left by exactly its overflow width as the user scrolls vertically.
+  const track = document.querySelector(".h-track");
+  const getScroll = () => -(track.scrollWidth - window.innerWidth);
+
+  const horiz = gsap.to(track, {
+    x: getScroll,
+    ease: "none",
+    scrollTrigger: {
+      trigger: ".h-section",
+      start: "top top",
+      end: () => "+=" + (track.scrollWidth - window.innerWidth),
+      pin: true,
+      scrub: 1,
+      invalidateOnRefresh: true   // recompute width on resize
+    }
+  });
+
+  // bonus: each card scales up as it crosses center. Because the cards move
+  // horizontally via `horiz`, we pass it as containerAnimation so ScrollTrigger
+  // measures their position inside that tween, not the page scroll.
+  gsap.utils.toArray(".h-card").forEach((card) => {
+    gsap.fromTo(card, { scale: 0.9 }, {
+      scale: 1, ease: "none",
+      scrollTrigger: { trigger: card, containerAnimation: horiz, start: "left right", end: "center center", scrub: true }
+    });
+  });
+</script>
+</body>
+</html>
