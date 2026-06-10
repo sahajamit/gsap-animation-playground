@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GSAP Animation Playground</title>
+<meta name="description" content="A hands-on gallery of GSAP (GreenSock Animation Platform) examples - core tweens, timelines, and every major free plugin.">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<section class="hero">
+  <div class="wrap">
+    <h1>GSAP <span class="g">Animation</span> Playground</h1>
+    <p>A personal reference gallery of what's possible with <strong>GSAP</strong> (GreenSock Animation Platform). Each card is a self-contained, copy-paste-friendly example. Open one, watch it run, read the exact code, lift it into your own project.</p>
+    <div>
+      <span class="badge"><strong>100% free</strong> since Apr 2025</span>
+      <span class="badge">GSAP v3.15 via CDN</span>
+      <span class="badge">no build step</span>
+      <span class="badge">18 examples</span>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <section class="section">
+    <h2>Core</h2>
+    <div class="grid">
+      <a class="card" href="templates/01-tween-basics.html"><div class="num">01</div><h3>Tween basics</h3><p>to, from, fromTo, set - the four building blocks of every animation.</p><span class="tag">gsap core</span></a>
+      <a class="card" href="templates/02-timeline-sequencing.html"><div class="num">02</div><h3>Timeline sequencing</h3><p>Chain tweens and control timing with the position parameter.</p><span class="tag">gsap core</span></a>
+      <a class="card" href="templates/03-stagger-grid.html"><div class="num">03</div><h3>Stagger grid</h3><p>Ripple one tween across many elements from the center out.</p><span class="tag">gsap core</span></a>
+      <a class="card" href="templates/04-eases-visualizer.html"><div class="num">04</div><h3>Eases visualizer</h3><p>Race every built-in ease side by side to feel the difference.</p><span class="tag">gsap core</span></a>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Text</h2>
+    <div class="grid">
+      <a class="card" href="templates/05-splittext-reveal.html"><div class="num">05</div><h3>SplitText reveal</h3><p>Split a headline into characters and stagger them in.</p><span class="tag">SplitText</span></a>
+      <a class="card" href="templates/06-textplugin-typewriter.html"><div class="num">06</div><h3>Typewriter</h3><p>Type strings out character by character with a blinking cursor.</p><span class="tag">TextPlugin</span></a>
+      <a class="card" href="templates/07-scrambletext.html"><div class="num">07</div><h3>ScrambleText</h3><p>Decrypt / glitch reveal that flips through random glyphs.</p><span class="tag">ScrambleText</span></a>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Scroll</h2>
+    <div class="grid">
+      <a class="card" href="templates/08-scrolltrigger.html"><div class="num">08</div><h3>ScrollTrigger</h3><p>Reveal on enter, plus pin a section and scrub it to the scrollbar.</p><span class="tag">ScrollTrigger</span></a>
+      <a class="card" href="templates/09-scrollto.html"><div class="num">09</div><h3>ScrollTo</h3><p>Smoothly animate the scroll position to any section.</p><span class="tag">ScrollToPlugin</span></a>
+      <a class="card" href="templates/10-scrollsmoother.html"><div class="num">10</div><h3>ScrollSmoother</h3><p>Eased momentum scrolling with data-speed parallax.</p><span class="tag">ScrollSmoother</span></a>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>SVG</h2>
+    <div class="grid">
+      <a class="card" href="templates/11-drawsvg.html"><div class="num">11</div><h3>DrawSVG</h3><p>Animate SVG strokes as if they're being drawn by hand.</p><span class="tag">DrawSVGPlugin</span></a>
+      <a class="card" href="templates/12-morphsvg.html"><div class="num">12</div><h3>MorphSVG</h3><p>Tween one shape into another - blob to star to heart.</p><span class="tag">MorphSVGPlugin</span></a>
+      <a class="card" href="templates/13-motionpath.html"><div class="num">13</div><h3>MotionPath</h3><p>Send an element gliding along an SVG path with autoRotate.</p><span class="tag">MotionPathPlugin</span></a>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>UI &amp; Interaction</h2>
+    <div class="grid">
+      <a class="card" href="templates/14-draggable.html"><div class="num">14</div><h3>Draggable + Inertia</h3><p>Drag, bound, and flick elements with physics momentum.</p><span class="tag">Draggable + Inertia</span></a>
+      <a class="card" href="templates/15-flip.html"><div class="num">15</div><h3>Flip</h3><p>Animate automatically between two completely different layouts.</p><span class="tag">Flip</span></a>
+      <a class="card" href="templates/16-observer.html"><div class="num">16</div><h3>Observer</h3><p>Unified wheel / touch / pointer input without hijacking scroll.</p><span class="tag">Observer</span></a>
+      <a class="card" href="templates/17-inertia-physics.html"><div class="num">17</div><h3>Physics2D burst</h3><p>Confetti and projectiles driven by velocity, angle, and gravity.</p><span class="tag">Physics2DPlugin</span></a>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Dev tools</h2>
+    <div class="grid">
+      <a class="card" href="templates/18-gsdevtools.html"><div class="num">18</div><h3>GSDevTools + CustomEase</h3><p>A scrubber UI for any timeline, plus hand-authored easing curves.</p><span class="tag">GSDevTools + CustomEase</span></a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Built as a learning reference. GSAP is made by <a href="https://gsap.com" target="_blank" rel="noopener">GreenSock</a> (acquired by Webflow, 2024) and became <a href="https://webflow.com/blog/gsap-becomes-free" target="_blank" rel="noopener">100% free for everyone in April 2025</a> - every plugin shown here, including formerly-paid "Club" plugins, is free for commercial use.</p>
+    <p>Docs: <a href="https://gsap.com/docs/v3/" target="_blank" rel="noopener">gsap.com/docs</a> &middot; GitHub: <a href="https://github.com/greensock/GSAP" target="_blank" rel="noopener">greensock/GSAP</a></p>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timeline sequencing | GSAP Playground</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/demo.css">
+<style>
+  .track { display: flex; flex-direction: column; gap: 18px; }
+  .bar { width: 60px; height: 60px; border-radius: 12px; }
+  .b1 { background: var(--accent); }
+  .b2 { background: var(--accent-2); }
+  .b3 { background: var(--accent-3); }
+</style>
+</head>
+<body>
+<header class="demo-head"></header>
+<main>
+  <div class="wrap">
+    <div class="stage">
+      <div class="track">
+        <div class="bar b1"></div>
+        <div class="bar b2"></div>
+        <div class="bar b3"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="../assets/demo.js"></script>
+<script>
+  // A timeline sequences many tweens. By default each tween starts when the
+  // previous one ends. The "position parameter" (3rd arg) overrides that.
+  function run() {
+    const tl = gsap.timeline({ defaults: { duration: 0.6, ease: "power3.out" } });
+
+    tl.to(".b1", { x: 220 })                 // starts at 0
+      .to(".b2", { x: 220 })                 // starts when b1 finishes (default)
+      .to(".b3", { x: 220 }, "<")            // "<" = start at the SAME time as the previous tween
+      .to(".bar", { x: 0, stagger: 0.1 }, "+=0.3"); // "+=0.3" = 0.3s after the timeline's current end
+
+    // timelines are seekable / reversible objects:
+    // tl.reverse(); tl.timeScale(2); tl.seek(0.5);
+  }
+  Demo.init({
+    num: "02 / core",
+    title: "Timeline sequencing & the position parameter",
+    blurb: "A timeline chains tweens so you control order without juggling delays. The position parameter ('<', '>', '+=0.3', or an absolute time) decides exactly when each tween lands relative to the others.",
+    plugins: "gsap core only",
+    doc: "https://gsap.com/docs/v3/GSAP/Timeline/",
+    run: run
+  });
+</script>
+</body>
+</html>

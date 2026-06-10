@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stagger grid | GSAP Playground</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/demo.css">
+<style>
+  .grid-stage { display: grid; grid-template-columns: repeat(10, 1fr); gap: 10px; }
+  .tile { width: 32px; height: 32px; border-radius: 7px; background: linear-gradient(135deg, var(--accent-3), var(--accent-2)); }
+</style>
+</head>
+<body>
+<header class="demo-head"></header>
+<main>
+  <div class="wrap">
+    <div class="stage">
+      <div class="grid-stage" id="grid"></div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="../assets/demo.js"></script>
+<script>
+  // build a 10x6 grid of tiles
+  const grid = document.getElementById("grid");
+  for (let i = 0; i < 60; i++) grid.appendChild(Object.assign(document.createElement("div"), { className: "tile" }));
+
+  // Stagger spreads one tween across many elements. The `from` + grid options
+  // make ripples radiate from the center instead of running left-to-right.
+  function run() {
+    gsap.from(".tile", {
+      scale: 0,
+      opacity: 0,
+      duration: 0.6,
+      ease: "back.out(2)",
+      stagger: {
+        each: 0.05,
+        grid: [6, 10],      // rows, cols -> lets GSAP compute 2D distance
+        from: "center",     // "start" | "center" | "edges" | "random" | index
+        ease: "power2.in"
+      }
+    });
+  }
+  Demo.init({
+    num: "03 / core",
+    title: "Stagger: ripple a tween across many elements",
+    blurb: "Stagger turns one tween into a wave across a set of targets. With grid + from:'center' you get a radial ripple. Swap from to 'random', 'edges', or a number to completely change the feel for free.",
+    plugins: "gsap core only",
+    doc: "https://gsap.com/resources/getting-started/Staggers/",
+    run: run
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tween basics (to / from / fromTo / set) | GSAP Playground</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/demo.css">
+<style>
+  .row { display: flex; gap: 40px; align-items: flex-end; }
+  .cell { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .cell span { font-family: var(--mono); font-size: 0.75rem; color: var(--txt-dim); }
+</style>
+</head>
+<body>
+<header class="demo-head"></header>
+<main>
+  <div class="wrap">
+    <div class="stage">
+      <div class="row">
+        <div class="cell"><div class="box to"></div><span>.to()</span></div>
+        <div class="cell"><div class="box from"></div><span>.from()</span></div>
+        <div class="cell"><div class="box fromto"></div><span>.fromTo()</span></div>
+        <div class="cell"><div class="box set"></div><span>.set()</span></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="../assets/demo.js"></script>
+<script>
+  // The four ways to make a tween. A "tween" animates target(s) over time.
+  function run() {
+    // .to()  -> animate FROM current state TO these values
+    gsap.to(".to", { x: 60, rotation: 360, duration: 1, ease: "power2.out" });
+
+    // .from() -> animate FROM these values TO the natural current state (great for entrances)
+    gsap.from(".from", { y: -120, opacity: 0, duration: 1, ease: "back.out(1.7)" });
+
+    // .fromTo() -> you define BOTH the start and the end explicitly
+    gsap.fromTo(".fromto", { scale: 0.2, opacity: 0 }, { scale: 1, opacity: 1, duration: 1, ease: "elastic.out(1, 0.4)" });
+
+    // .set() -> apply values INSTANTLY (a zero-duration tween). Good for initial state.
+    gsap.set(".set", { backgroundColor: "#6d5dfc", borderRadius: "50%" });
+  }
+  Demo.init({
+    num: "01 / core",
+    title: "Tween basics: to, from, fromTo, set",
+    blurb: "Every GSAP animation is a tween. These four methods cover ~80% of day-to-day work. `to` animates to a state, `from` animates in from a state, `fromTo` pins both ends, and `set` applies values with no animation.",
+    plugins: "gsap core only — no plugin needed",
+    doc: "https://gsap.com/docs/v3/GSAP/",
+    run: run
+  });
+</script>
+</body>
+</html>

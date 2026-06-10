@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScrambleText | GSAP Playground</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/demo.css">
+<style>
+  .scramble { font-family: var(--mono); font-size: clamp(1.4rem, 5vw, 2.6rem); color: var(--accent); letter-spacing: 0.04em; text-align: center; }
+</style>
+</head>
+<body>
+<header class="demo-head"></header>
+<main>
+  <div class="wrap">
+    <div class="stage">
+      <div class="scramble">DECODING...</div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrambleTextPlugin.min.js"></script>
+<script src="../assets/demo.js"></script>
+<script>
+  gsap.registerPlugin(ScrambleTextPlugin);
+
+  // ScrambleText flips through random characters before resolving to the final
+  // text - the "hacker decrypt" effect. `chars` sets the noise alphabet.
+  function run() {
+    const phrases = ["ACCESS GRANTED", "GreenSock Animation Platform", "100% FREE SINCE 2025", "now decrypting..."];
+    const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.8 });
+    phrases.forEach((p) => {
+      tl.to(".scramble", {
+        duration: 1.4,
+        scrambleText: {
+          text: p,
+          chars: "upperAndLowerCase",  // or "01", or any custom string
+          revealDelay: 0.4,
+          speed: 0.6
+        }
+      }).to({}, { duration: 1 });
+    });
+  }
+  Demo.init({
+    num: "07 / text",
+    title: "ScrambleText: decrypt / glitch reveal",
+    blurb: "Scrambles through random glyphs before snapping to the target string. Formerly a paid Club plugin, now free. Great for hero headlines, counters, and cyber-style UI.",
+    plugins: "ScrambleTextPlugin (free since Apr 2025)",
+    doc: "https://gsap.com/docs/v3/Plugins/ScrambleTextPlugin/",
+    run: run
+  });
+</script>
+</body>
+</html>

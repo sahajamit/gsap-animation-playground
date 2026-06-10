@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScrollTo | GSAP Playground</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/demo.css">
+<style>
+  .stage.scroll { display: block; align-items: initial; min-height: auto; padding: 0; overflow: hidden; }
+  .scroller { height: 360px; overflow-y: auto; scroll-behavior: auto; }
+  .nav-dots { display: flex; gap: 10px; padding: 14px; position: sticky; top: 0; background: var(--bg-soft); border-bottom: 1px solid var(--line); z-index: 2; }
+  .nav-dots button { font-family: var(--mono); font-size: 0.8rem; }
+  .sec { height: 360px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 700; }
+  #s0 { background: #1a2030; } #s1 { background: #20182e; } #s2 { background: #11261b; } #s3 { background: #2a1d12; }
+</style>
+</head>
+<body>
+<header class="demo-head"></header>
+<main>
+  <div class="wrap">
+    <div class="stage scroll">
+      <div class="nav-dots">
+        <button class="btn ghost" data-to="#s0">Intro</button>
+        <button class="btn ghost" data-to="#s1">Features</button>
+        <button class="btn ghost" data-to="#s2">Pricing</button>
+        <button class="btn ghost" data-to="#s3">Contact</button>
+      </div>
+      <div class="scroller" id="scroller">
+        <div class="sec" id="s0">Intro</div>
+        <div class="sec" id="s1">Features</div>
+        <div class="sec" id="s2">Pricing</div>
+        <div class="sec" id="s3">Contact</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollToPlugin.min.js"></script>
+<script src="../assets/demo.js"></script>
+<script>
+  gsap.registerPlugin(ScrollToPlugin);
+
+  // ScrollToPlugin animates the scroll position smoothly to a target element,
+  // a pixel offset, or "max". Works on the window or any scrollable container.
+  function run() {
+    const scroller = document.getElementById("scroller");
+    document.querySelectorAll(".nav-dots button").forEach((btn) => {
+      btn.onclick = () => {
+        gsap.to(scroller, {
+          duration: 1,
+          ease: "power2.inOut",
+          scrollTo: { y: btn.dataset.to, offsetY: 0 } // smooth-scroll the container to that section
+        });
+      };
+    });
+  }
+  Demo.init({
+    num: "09 / scroll",
+    title: "ScrollToPlugin: animated scroll / anchor jumps",
+    blurb: "Smoothly tween the scroll position to an element, pixel value, or 'max'. Click the tabs to glide the inner panel to each section. Use it for one-page nav, 'back to top', or step-through flows.",
+    plugins: "ScrollToPlugin (free)",
+    doc: "https://gsap.com/docs/v3/Plugins/ScrollToPlugin/",
+    run: run
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Draggable | GSAP Playground</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/demo.css">
+<style>
+  .stage { min-height: 380px; }
+  .drag-area { position: relative; width: 100%; height: 320px; }
+  .chip { position: absolute; padding: 16px 22px; border-radius: 14px; font-weight: 700; cursor: grab;
+    background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: #0b0d12; user-select: none; touch-action: none; }
+  .chip:active { cursor: grabbing; }
+  .c1 { top: 40px; left: 30px; } .c2 { top: 130px; left: 200px; background: linear-gradient(135deg, var(--accent-3), #a48bff); color:#fff; }
+  .c3 { top: 220px; left: 90px; background: var(--bg-card); color: var(--txt); border: 1px solid var(--line); }
+  .hint { position: absolute; bottom: 6px; right: 10px; font-family: var(--mono); font-size: 0.75rem; color: var(--txt-dim); }
+</style>
+</head>
+<body>
+<header class="demo-head"></header>
+<main>
+  <div class="wrap">
+    <div class="stage">
+      <div class="drag-area" id="area">
+        <div class="chip c1">drag me</div>
+        <div class="chip c2">flick me</div>
+        <div class="chip c3">throw me</div>
+        <span class="hint">drag &amp; release with momentum</span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/Draggable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/InertiaPlugin.min.js"></script>
+<script src="../assets/demo.js"></script>
+<script>
+  gsap.registerPlugin(Draggable, InertiaPlugin);
+
+  // Draggable makes any element draggable with one call. With InertiaPlugin
+  // (free since Apr 2025) and inertia:true, a flick keeps gliding and eases
+  // to a stop - bounded by the container so chips can't escape.
+  function run() {
+    Draggable.create(".chip", {
+      bounds: "#area",
+      inertia: true,
+      edgeResistance: 0.65,
+      onDragStart() { gsap.to(this.target, { scale: 1.08, duration: 0.2 }); },
+      onDragEnd() { gsap.to(this.target, { scale: 1, duration: 0.2 }); }
+    });
+  }
+  Demo.init({
+    num: "14 / ui",
+    title: "Draggable + Inertia: throw with momentum",
+    blurb: "One call makes elements draggable - constrained to bounds, with optional spin, snap, and physics-based flick (via the now-free InertiaPlugin). The backbone of sliders, carousels, kanban cards, and dials.",
+    plugins: "Draggable + InertiaPlugin (free since Apr 2025)",
+    doc: "https://gsap.com/docs/v3/Plugins/Draggable/",
+    run: run
+  });
+</script>
+</body>
+</html>

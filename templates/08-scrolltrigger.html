@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScrollTrigger | GSAP Playground</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/demo.css">
+<style>
+  .stage.scroll { display: block; align-items: initial; min-height: auto; padding: 0; overflow: visible; }
+  .panel { min-height: 70vh; display: flex; align-items: center; justify-content: center; padding: 40px; text-align: center; }
+  .hint { font-family: var(--mono); color: var(--txt-dim); }
+  .reveal-row { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+  .reveal { width: 150px; padding: 28px 18px; background: var(--bg-card); border: 1px solid var(--line); border-radius: 14px; }
+  .pin-panel { background: var(--bg-soft); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .pin-box { width: 90px; height: 90px; border-radius: 16px; background: linear-gradient(135deg, var(--accent-2), var(--accent)); }
+</style>
+</head>
+<body>
+<header class="demo-head"></header>
+<main>
+  <div class="wrap">
+    <div class="stage scroll">
+      <div class="panel"><p class="hint">&darr; scroll down &darr;</p></div>
+
+      <div class="panel">
+        <div class="reveal-row">
+          <div class="reveal">enters on scroll</div>
+          <div class="reveal">one by one</div>
+          <div class="reveal">as they hit 80%</div>
+        </div>
+      </div>
+
+      <div class="panel pin-panel">
+        <div class="pin-box"></div>
+      </div>
+
+      <div class="panel"><p class="hint">the box above was pinned &amp; scrubbed</p></div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
+<script src="../assets/demo.js"></script>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ScrollTrigger is the most-used GSAP plugin (now free). Two core patterns:
+  //   1) fire an animation when an element enters the viewport
+  //   2) PIN an element and SCRUB its animation to the scrollbar
+  function run() {
+    // 1) reveal each card as it scrolls into view
+    gsap.utils.toArray(".reveal").forEach((card, i) => {
+      gsap.from(card, {
+        opacity: 0, y: 60, duration: 0.7, ease: "power3.out", delay: i * 0.1,
+        scrollTrigger: { trigger: card, start: "top 80%" } // when card top hits 80% of viewport
+      });
+    });
+
+    // 2) pin the panel and tie the box's motion directly to scroll progress
+    gsap.to(".pin-box", {
+      rotation: 360, x: 180, borderRadius: "50%", ease: "none",
+      scrollTrigger: {
+        trigger: ".pin-panel",
+        start: "top top",
+        end: "+=700",
+        pin: true,      // freeze the panel while we scroll through it
+        scrub: true     // animation progress = scroll progress
+      }
+    });
+  }
+  Demo.init({
+    num: "08 / scroll",
+    title: "ScrollTrigger: reveal, pin & scrub",
+    blurb: "The workhorse of modern scroll sites. Trigger animations on enter, or pin a section and scrub its animation to the scrollbar so the user 'drives' it. Free since Apr 2025 (was a paid Club plugin).",
+    plugins: "ScrollTrigger (free since Apr 2025)",
+    doc: "https://gsap.com/docs/v3/Plugins/ScrollTrigger/",
+    run: run
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Physics2D burst | GSAP Playground</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/demo.css">
+<style>
+  .stage { min-height: 380px; }
+  .emitter { position: relative; width: 100%; height: 320px; display: flex; align-items: center; justify-content: center; }
+  .particle { position: absolute; width: 14px; height: 14px; border-radius: 3px; }
+  .pop { padding: 12px 24px; font-weight: 700; }
+</style>
+</head>
+<body>
+<header class="demo-head"></header>
+<main>
+  <div class="wrap">
+    <div class="stage">
+      <div class="emitter" id="emitter">
+        <button class="btn pop" id="boom">Burst confetti</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/Physics2DPlugin.min.js"></script>
+<script src="../assets/demo.js"></script>
+<script>
+  gsap.registerPlugin(Physics2DPlugin);
+
+  // Physics2DPlugin animates x/y using real physics inputs: velocity, angle,
+  // gravity, friction - instead of fixed end coordinates. Ideal for confetti,
+  // sparks, explosions, and natural projectile motion. Free since Apr 2025.
+  const colors = ["#88ce02", "#0ae448", "#6d5dfc", "#f6c945", "#ff6b6b", "#4dd0e1"];
+
+  function run() {
+    const emitter = document.getElementById("emitter");
+
+    function burst() {
+      for (let i = 0; i < 60; i++) {
+        const p = document.createElement("div");
+        p.className = "particle";
+        p.style.background = colors[i % colors.length];
+        emitter.appendChild(p);
+
+        gsap.to(p, {
+          duration: gsap.utils.random(1.2, 2),
+          physics2D: {
+            velocity: gsap.utils.random(250, 520), // initial speed (px/s)
+            angle: gsap.utils.random(250, 290),    // launch angle (degrees; ~up)
+            gravity: 600                            // pulls everything back down
+          },
+          rotation: gsap.utils.random(-360, 360),
+          opacity: 0,
+          ease: "none",
+          onComplete: () => p.remove()
+        });
+      }
+    }
+    document.getElementById("boom").onclick = burst;
+    burst(); // fire once on load
+  }
+  Demo.init({
+    num: "17 / ui",
+    title: "Physics2D: confetti & projectile motion",
+    blurb: "Drive motion with velocity, angle, and gravity instead of hard-coded endpoints, so each particle arcs naturally. The free Physics2D and Inertia plugins cover confetti, sparks, and flick-to-rest interactions.",
+    plugins: "Physics2DPlugin (free since Apr 2025)",
+    doc: "https://gsap.com/docs/v3/Plugins/Physics2DPlugin/",
+    run: run
+  });
+</script>
+</body>
+</html>

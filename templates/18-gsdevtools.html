@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GSDevTools + CustomEase | GSAP Playground</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/demo.css">
+<style>
+  .stage { padding-bottom: 70px; }       /* leave room above the GSDevTools bar */
+  .row { display: flex; gap: 26px; align-items: center; }
+  .ball2 { width: 56px; height: 56px; border-radius: 50%; }
+  .ball2:nth-child(1){background:#88ce02} .ball2:nth-child(2){background:#0ae448} .ball2:nth-child(3){background:#6d5dfc}
+  .note { text-align: center; }
+</style>
+</head>
+<body>
+<header class="demo-head"></header>
+<main>
+  <div class="wrap">
+    <div class="stage">
+      <div>
+        <div class="row">
+          <div class="ball2"></div><div class="ball2"></div><div class="ball2"></div>
+        </div>
+        <p class="note">use the scrubber at the bottom of the screen to drive this timeline</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/CustomEase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/GSDevTools.min.js"></script>
+<script src="../assets/demo.js"></script>
+<script>
+  gsap.registerPlugin(CustomEase, GSDevTools);
+
+  // Two free dev-experience plugins:
+  //  - CustomEase: design your own easing curve from an SVG-path-like string.
+  //  - GSDevTools: a draggable scrubber/play UI for ANY timeline, so you can
+  //    inspect, slow down, loop, and step through an animation while building it.
+  let dev;
+  function run() {
+    // a bespoke ease - the path string is what GSAP's ease visualizer exports
+    CustomEase.create("custom", "M0,0 C0.25,0.1 0.25,1 1,1");
+
+    const tl = gsap.timeline();
+    tl.to(".ball2", { x: 240, ease: "custom", duration: 1, stagger: 0.2 })
+      .to(".ball2", { y: -60, ease: "elastic.out(1, 0.3)", duration: 0.8, stagger: 0.15 })
+      .to(".ball2", { x: 0, y: 0, rotation: 360, ease: "power3.inOut", duration: 1, stagger: 0.1 });
+
+    // attach the dev scrubber to this timeline
+    dev = GSDevTools.create({ animation: tl });
+
+    // cleanup so replay doesn't stack multiple scrubber bars
+    return () => { if (dev) dev.kill(); };
+  }
+  Demo.init({
+    num: "18 / dev",
+    title: "GSDevTools + CustomEase",
+    blurb: "GSDevTools gives any timeline a play/scrub/loop UI for fast iteration while building. CustomEase lets you hand-author an easing curve. Both were paid Club plugins - now free.",
+    plugins: "GSDevTools + CustomEase (free since Apr 2025)",
+    doc: "https://gsap.com/docs/v3/Plugins/GSDevTools/",
+    run: run
+  });
+</script>
+</body>
+</html>

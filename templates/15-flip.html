@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flip | GSAP Playground</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/demo.css">
+<style>
+  .stage { flex-direction: column; gap: 20px; }
+  .board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; width: 100%; max-width: 460px; }
+  .board.compact { grid-template-columns: repeat(2, 1fr); }
+  .item { aspect-ratio: 1; border-radius: 14px; display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-weight: 700; color: #0b0d12; }
+  .item:nth-child(1){background:#88ce02} .item:nth-child(2){background:#0ae448}
+  .item:nth-child(3){background:#6d5dfc;color:#fff} .item:nth-child(4){background:#f6c945}
+  .item:nth-child(5){background:#ff6b6b} .item:nth-child(6){background:#4dd0e1}
+</style>
+</head>
+<body>
+<header class="demo-head"></header>
+<main>
+  <div class="wrap">
+    <div class="stage">
+      <div class="board" id="board">
+        <div class="item">1</div><div class="item">2</div><div class="item">3</div>
+        <div class="item">4</div><div class="item">5</div><div class="item">6</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/Flip.min.js"></script>
+<script src="../assets/demo.js"></script>
+<script>
+  gsap.registerPlugin(Flip);
+
+  // Flip solves "animate between two layouts". You: (1) record the current state,
+  // (2) make ANY DOM/CSS change (reorder, resize, change grid), (3) call Flip.from
+  // and GSAP smoothly animates the difference. Free since Apr 2025.
+  function run() {
+    const board = document.getElementById("board");
+    let compact = false;
+
+    function toggle() {
+      const state = Flip.getState(".item");          // 1. capture positions/sizes
+      board.classList.toggle("compact");             // 2. change the layout instantly
+      compact = !compact;
+      Flip.from(state, {                              // 3. animate from old -> new
+        duration: 0.7,
+        ease: "power2.inOut",
+        stagger: 0.04,
+        absolute: true
+      });
+    }
+    // auto-toggle on a loop so you can watch it; also click the board to toggle
+    board.onclick = toggle;
+    const id = setInterval(toggle, 1800);
+    // gsap.context cleanup hook so the interval stops on replay/revert
+    return () => clearInterval(id);
+  }
+  Demo.init({
+    num: "15 / ui",
+    title: "Flip: animate between two layouts",
+    blurb: "Change the DOM however you like - reorder a grid, move an item to another container, swap classes - and Flip animates the transition automatically. The cleanest way to do shared-element transitions. (Click the grid too.)",
+    plugins: "Flip (free since Apr 2025)",
+    doc: "https://gsap.com/docs/v3/Plugins/Flip/",
+    run: run
+  });
+</script>
+</body>
+</html>

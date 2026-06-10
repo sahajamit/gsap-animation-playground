@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MotionPath | GSAP Playground</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/demo.css">
+<style>
+  svg { width: 100%; max-width: 460px; height: auto; overflow: visible; }
+  #track { fill: none; stroke: #2a3346; stroke-width: 2; stroke-dasharray: 6 8; }
+  #rocket { font-size: 30px; }
+</style>
+</head>
+<body>
+<header class="demo-head"></header>
+<main>
+  <div class="wrap">
+    <div class="stage">
+      <svg viewBox="0 0 400 240">
+        <path id="track" d="M20,200 C80,40 180,40 220,140 S360,220 380,60"/>
+        <text id="rocket" x="0" y="0" text-anchor="middle" dominant-baseline="middle">&#128640;</text>
+      </svg>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/MotionPathPlugin.min.js"></script>
+<script src="../assets/demo.js"></script>
+<script>
+  gsap.registerPlugin(MotionPathPlugin);
+
+  // MotionPath moves an element ALONG an SVG path (or a set of points).
+  // autoRotate makes the object turn to face its direction of travel.
+  function run() {
+    gsap.to("#rocket", {
+      duration: 4,
+      repeat: -1,
+      ease: "power1.inOut",
+      motionPath: {
+        path: "#track",     // follow this path
+        align: "#track",    // align coordinates to the path's own space
+        alignOrigin: [0.5, 0.5],
+        autoRotate: 90      // face along the path (offset because the emoji points up-right)
+      }
+    });
+  }
+  Demo.init({
+    num: "13 / svg",
+    title: "MotionPath: follow a curve",
+    blurb: "Send any element gliding along an SVG path with autoRotate so it banks into turns. Perfect for orbiting icons, flight paths, conveyor effects, and connecting-line animations. Free.",
+    plugins: "MotionPathPlugin (free)",
+    doc: "https://gsap.com/docs/v3/Plugins/MotionPathPlugin/",
+    run: run
+  });
+</script>
+</body>
+</html>

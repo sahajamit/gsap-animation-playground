@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Observer | GSAP Playground</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/demo.css">
+<style>
+  .stage { flex-direction: column; gap: 18px; cursor: ns-resize; }
+  .dial { width: 150px; height: 150px; border-radius: 50%; border: 3px solid var(--line); position: relative;
+    display: flex; align-items: center; justify-content: center; }
+  .needle { position: absolute; width: 4px; height: 64px; background: var(--accent); top: 11px; border-radius: 4px; transform-origin: bottom center; }
+  .readout { font-family: var(--mono); font-size: 1.6rem; color: var(--accent-2); }
+  .label { font-family: var(--mono); color: var(--txt-dim); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+<header class="demo-head"></header>
+<main>
+  <div class="wrap">
+    <div class="stage" id="zone">
+      <div class="dial"><div class="needle"></div></div>
+      <div class="readout"><span id="val">0</span></div>
+      <div class="label">scroll / drag / swipe up &amp; down anywhere in this box</div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/Observer.min.js"></script>
+<script src="../assets/demo.js"></script>
+<script>
+  gsap.registerPlugin(Observer);
+
+  // Observer is a unified, normalized listener for wheel, touch, pointer and
+  // scroll events across devices - without hijacking native scroll. You react to
+  // direction (onUp/onDown/onLeft/onRight) instead of wiring raw events. Free.
+  function run() {
+    let value = 0;
+    const valEl = document.getElementById("val");
+
+    function nudge(dir) {
+      value = gsap.utils.clamp(0, 100, value + dir * 5);
+      gsap.to(".needle", { rotation: (value / 100) * 270 - 135, duration: 0.4, ease: "power2.out" });
+      gsap.to(valEl, { duration: 0.4, snap: { innerText: 1 }, innerText: value }); // animate the number
+    }
+
+    Observer.create({
+      target: "#zone",
+      type: "wheel,touch,pointer",  // listen to all input types at once
+      onUp: () => nudge(1),
+      onDown: () => nudge(-1),
+      tolerance: 10,
+      preventDefault: true
+    });
+  }
+  Demo.init({
+    num: "16 / ui",
+    title: "Observer: unified wheel / touch / pointer input",
+    blurb: "One API to react to scroll, drag, and swipe direction across mouse and touch - no native scroll required. Build custom scroll-jacked sections, gesture sliders, and dials. Free.",
+    plugins: "Observer (free)",
+    doc: "https://gsap.com/docs/v3/Plugins/Observer/",
+    run: run
+  });
+</script>
+</body>
+</html>
